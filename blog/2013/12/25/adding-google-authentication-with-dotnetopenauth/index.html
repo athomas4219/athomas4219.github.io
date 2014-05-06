@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Andrew Thomas' Blog</title>
+  <title>Adding Google Authentication With DotNetOpenAuth - Andrew Thomas' Blog</title>
   <meta name="author" content="Andrew Thomas">
 
   
-  <meta name="description" content="On a normal day I spend most of my time in Windows 7 and Windows 8 doing my job and playing video games. I&rsquo;m an Apple fanboy, so also have an &hellip;">
+  <meta name="description" content="Visual Studio 2013 ships with a very nice template to use DotNetOpenAuth for authentication with Google, Twitter, Facebook, and Microsoft. However, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.at-dot.net">
+  <link rel="canonical" href="http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Andrew Thomas' Blog" type="application/atom+xml">
@@ -63,156 +63,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/04/16/resizing-the-screen-resolution-in-ubuntu-when-you-cant-see-the-apply-button/">Resizing the Screen Resolution in Ubuntu When You Can&#8217;t See the Apply Button</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-16T10:48:29-04:00" pubdate data-updated="true">Apr 16<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>On a normal day I spend most of my time in Windows 7 and Windows 8 doing my job and playing video games. I&rsquo;m an Apple fanboy, so also have an old Mac (new ones are expensive!). However, I like to experiment with Linux just to see what&rsquo;s up.</p>
-
-<p>I recently installed a beta release of Ubuntu 14.04 into VMware to see what&rsquo;s new. After installation, my resolution was stuck in 800x600, which makes for a very small screen. I went to the display settings panel, changed my resolution to something larger, and went to click the <code>Apply</code> button&hellip;which I couldn&rsquo;t see. No matter what I tried, I could not manage to drag the settings window around such that I could see the Apply button.</p>
-
-<p>A little help from the internet ultimately showed that after clicking the resolution size text box you need <strong>6 tabs</strong>, then <code>Return</code> in order to click the <code>Apply</code> button.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/15/outlook-has-left-the-building/">Outlook Has Left the Building</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-15T09:49:31-05:00" pubdate data-updated="true">Jan 15<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Today I undocked my laptop from my docking station and headed to a meeting. When I arrived, I found that my Outlook had turned into a title bar, looking like this (no, the screenshot is not cut off, that&rsquo;s what it really looked like):</p>
-
-<p><img src="/images/OutlookScreenshot.png" title="Outlook Screenshot" alt="Outlook Screenshot"></p>
-
-<p>No matter what I tried, I could not get it back. No other application on my laptop behaved this way, just Outlook.</p>
-
-<p>Ultimately, I found that Outlook could be restored simply by right-clicking on the task bar and selecting <code>Cascade Windows</code>.</p>
-
-<p>Outlook is back!</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/29/entity-framework-6-specifying-a-connectionstring-in-code/">Entity Framework 6: Specifying a ConnectionString in Code</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-29T07:37:31-05:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;ve been working recently with Entity Framework 6. So far I find it pleasant enough, although not as intuitive (at least for me) as the likes of NHibernate.</p>
-
-<p>One of the things I wanted to do was to determine the connection string in code, rather than specifying it in my web.config file. You can use the following code snippet to set your connection string.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="k">public</span> <span class="k">class</span> <span class="nc">MyContext</span> <span class="p">:</span> <span class="n">DbContext</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="k">public</span> <span class="nf">MyContext</span><span class="p">()</span> <span class="p">:</span> <span class="k">base</span><span class="p">()</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>      <span class="n">Database</span><span class="p">.</span><span class="n">Connection</span><span class="p">.</span><span class="n">ConnectionString</span> <span class="p">=</span> <span class="n">myAlternateConnectionString</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/">Adding Google Authentication With DotNetOpenAuth</a></h1>
+      <h1 class="entry-title">Adding Google Authentication With DotNetOpenAuth</h1>
     
     
       <p class="meta">
@@ -235,7 +91,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Visual Studio 2013 ships with a very nice template to use <a href="http://dotnetopenauth.net/">DotNetOpenAuth</a> for authentication with Google, Twitter, Facebook, and Microsoft. However, it&rsquo;s a little complicated and comes with a lot of cruft. Rather than having too much in my ASP.NET MVC project, I prefer to start with an empty project and add features as I need them. If you are like me, you can use the following instructions to add Google authentication using DotNetOpenAuth.</p>
+<div class="entry-content"><p>Visual Studio 2013 ships with a very nice template to use <a href="http://dotnetopenauth.net/">DotNetOpenAuth</a> for authentication with Google, Twitter, Facebook, and Microsoft. However, it&rsquo;s a little complicated and comes with a lot of cruft. Rather than having too much in my ASP.NET MVC project, I prefer to start with an empty project and add features as I need them. If you are like me, you can use the following instructions to add Google authentication using DotNetOpenAuth.</p>
 
 <h4>Creating the Project</h4>
 
@@ -547,76 +403,16 @@
 
 <p>If you&rsquo;ve done everything correctly, once you run the project you&rsquo;ll be presented with your welcome screen. When you click on the <code>Sign In</code> link, you be redirected to the Google logon page, then back to your application&rsquo;s home page.</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/18/installing-the-electric-plum-iphone-simulator-in-visual-studio-2013/">Installing the Electric Plum iPhone Simulator in Visual Studio 2013</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Andrew Thomas</span></span>
 
-<time datetime="2013-12-18T09:51:36-05:00" pubdate data-updated="true">Dec 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;m going to file this under &ldquo;Late to the Party Again&rdquo;, but I just learned that Microsoft offers a free version of the <a href="http://www.electricplum.com/">Electric Plum</a> iPhone/iPad Simulator through Web Matrix. The version is a lite version, but well worth the free download.</p>
-
-<ol>
-<li>First, if you don&rsquo;t already have it, install and run <a href="http://www.microsoft.com/web/webmatrix/">Web Matrix</a>.</li>
-<li>Once Web Matrix is open, create a new site (I chose the empty site template).</li>
-<li>On the tool bar, click on the <code>Extensions</code> button.</li>
-<li>Search for the <code>iPhone Simulator</code> if it&rsquo;s not already on the screen.</li>
-<li>Click the <code>Install</code> button and click through to install the simulator.</li>
-<li>You may close Web Matrix once the installation is complete.</li>
-<li>Start up Visual Studio 2013 and open your solution</li>
-<li>Click the down arrow next to the <code>Play</code> button</li>
-<li>Click the <code>Browse With</code> menu item</li>
-<li>In the <code>Browse With</code> dialog, click the <code>Add</code> button</li>
-<li>In the <code>Add Program</code> dialog, navigate to <code>C:\Users\&lt;your account name&gt;\AppData\Local\Microsoft\WebMatrix\Extensions\30\iPhoneSimulator\ElectricMobileSim\ElectricMobileSim.exe</code> in the program field.</li>
-<li>In the <code>Arguments</code> field, enter <code>"1"</code> to simulate an iPhone, or <code>"2"</code> to simulate an iPad.</li>
-<li>Click the <code>OK</code> button</li>
-<li>Now you may select your new emulator from the list of browsers.</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/17/establishing-a-trust-relationship-or-trusting-local-certificates/">Establishing a Trust Relationship or Trusting Local Certificates</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -628,68 +424,40 @@
   
 
 
-<time datetime="2013-12-17T09:52:17-05:00" pubdate data-updated="true">Dec 17<span>th</span>, 2013</time>
-        
-      </p>
+<time datetime="2013-12-25T09:50:49-05:00" pubdate data-updated="true">Dec 25<span>th</span>, 2013</time>
+      
+
+
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/" data-via="athomas4219" data-counturl="http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/" >Tweet</a>
+  
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/18/installing-the-electric-plum-iphone-simulator-in-visual-studio-2013/" title="Previous Post: Installing the Electric Plum iPhone Simulator in Visual Studio 2013">&laquo; Installing the Electric Plum iPhone Simulator in Visual Studio 2013</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/12/29/entity-framework-6-specifying-a-connectionstring-in-code/" title="Next Post: Entity Framework 6: Specifying a ConnectionString in Code">Entity Framework 6: Specifying a ConnectionString in Code &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
 
-  <div class="entry-content"><p>At work, the certificates in our lab environment are signed by a local certificate authority. Additionally, we do not have the lab intermediate certificate authorities on our local workstations. This means that when we call WCF or REST services we sometimes see the following error:</p>
-
-<pre><code>Could not establish trust relationship for the SSL/TLS secure channel with authority 'someserver.whereiwork.com'.
-</code></pre>
-
-<p>This error can be resolved either by importing the intermediate certificate authorities on your workstation, or by using the following code.</p>
-
-<p>Please note that this code should only be executed <strong>once</strong> in your application (<code>global.asax</code>) and <strong>never</strong> in a production environment because it short circuits the protection offered by the PKI.</p>
-
-<p>C#:</p>
-
-<figure class='code'><figcaption><span>C# </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="cp">#if DEBUG</span>
-</span><span class='line'>  <span class="n">ServicePointManager</span><span class="p">.</span><span class="n">ServerCertificateValidationCallback</span> <span class="p">+=</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">cert</span><span class="p">,</span> <span class="n">chain</span><span class="p">,</span> <span class="n">sslPolicyErrors</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="k">true</span><span class="p">;</span>
-</span><span class='line'><span class="cp">#endif</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you have to do this in Visual Basic, use the following:</p>
-
-<figure class='code'><figcaption><span>VB.NET </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='vbnet'><span class='line'><span class="cp">#If DEBUG Then</span>
-</span><span class='line'>  <span class="n">ServicePointManager</span><span class="p">.</span><span class="n">ServerCertificateValidationCallback</span> <span class="o">=</span> <span class="ow">AddressOf</span> <span class="n">AcceptAllCertificates</span>
-</span><span class='line'><span class="cp">#End If</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">Private</span> <span class="k">Function</span> <span class="nf">AcceptAllCertificates</span><span class="p">(</span><span class="k">ByVal</span> <span class="n">sender</span> <span class="ow">As</span> <span class="kt">Object</span><span class="p">,</span> <span class="k">ByVal</span> <span class="n">cert</span> <span class="ow">As</span> <span class="n">X509Certificate</span><span class="p">,</span> <span class="k">ByVal</span> <span class="n">chain</span> <span class="ow">As</span> <span class="n">X509Chain</span><span class="p">,</span> <span class="k">ByVal</span> <span class="n">sslPolicyErrors</span> <span class="ow">As</span> <span class="n">SslPolicyErrors</span><span class="p">)</span> <span class="ow">As</span> <span class="kt">Boolean</span>
-</span><span class='line'>    <span class="k">Return</span> <span class="k">True</span>
-</span><span class='line'><span class="k">End</span> <span class="k">Function</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -697,7 +465,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/04/16/resizing-the-screen-resolution-in-ubuntu-when-you-cant-see-the-apply-button/">Resizing the Screen Resolution in Ubuntu When You Can&#8217;t See the Apply Button</a>
+        <a href="/blog/2014/04/16/resizing-the-screen-resolution-in-ubuntu-when-you-cant-see-the-apply-button/">Resizing the Screen Resolution in Ubuntu When You Can't See the Apply Button</a>
       </li>
     
       <li class="post">
@@ -722,7 +490,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/athomas4219">@athomas4219</a> on GitHub
@@ -755,6 +523,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -769,7 +538,10 @@
       var disqus_shortname = 'andrewthomasblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/';
+        var disqus_url = 'http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
