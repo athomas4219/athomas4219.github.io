@@ -4,7 +4,7 @@
   <title><![CDATA[Andrew Thomas' Blog]]></title>
   <link href="http://blog.at-dot.net/atom.xml" rel="self"/>
   <link href="http://blog.at-dot.net/"/>
-  <updated>2014-05-06T13:49:42-04:00</updated>
+  <updated>2014-05-06T14:24:05-04:00</updated>
   <id>http://blog.at-dot.net/</id>
   <author>
     <name><![CDATA[Andrew Thomas]]></name>
@@ -12,6 +12,218 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Preparing Your WebAPI Site to Produce Better Documentation]]></title>
+    <link href="http://blog.at-dot.net/blog/2014/05/06/preparing-your-webapi-site-to-produce-better-documentation/"/>
+    <updated>2014-05-06T13:59:43-04:00</updated>
+    <id>http://blog.at-dot.net/blog/2014/05/06/preparing-your-webapi-site-to-produce-better-documentation</id>
+    <content type="html"><![CDATA[<h3>Introduction</h3>
+
+<p>A WebAPI site produced from the Visual Studio 2013 template comes with an MVC area designed to provide rich help pages. For the most part, this functionality comes for free with the template. However, using the following instructions can help produce a richer help experience for the user by allowing you to use multiple lines in your method descriptions. You are then free to include more information about the method, including expected return codes or additional descriptive text.</p>
+
+<h3>Walkthrough</h3>
+
+<p><strong>Note:</strong> if you are creating a brand new site, the help area will only be created if you select the Web API project template when creating a new project.</p>
+
+<p>First, we need to configure the project to produce the XML file used by the help system.</p>
+
+<ul>
+<li>Right-click on your WebAPI project and select <code>Properties</code></li>
+<li>Click on the <code>Build</code> tab</li>
+<li>In the <code>Output</code> section, click on the checkbox entitled <code>XML documentation file</code></li>
+<li>In the text box, enter: <code>App_Data\XmlDocument.xml</code></li>
+<li>Save the project and close the project properties page.</li>
+</ul>
+
+
+<p>Next, we need to configure the help system to actually consume the XML file created from the step above and produce the output web pages.</p>
+
+<ul>
+<li>Find the file <code>Areas-&gt;HelpPage-&gt;App_Start-&gt;HelpPageConfig.cs</code></li>
+<li>Uncomment the line reading:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Areas\HelpPage\App_Start\HelpPageConfig.cs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="n">config</span><span class="p">.</span><span class="n">SetDocumentationProvider</span><span class="p">(</span><span class="k">new</span> <span class="n">XmlDocumentationProvider</span><span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Server</span><span class="p">.</span><span class="n">MapPath</span><span class="p">(</span><span class="s">&quot;~/App_Data/XmlDocument.xml&quot;</span><span class="p">)));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Add configuration to set the response types like the following:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Areas\HelpPage\App_Start\HelpPageConfig.cs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="n">config</span><span class="p">.</span><span class="n">SetActualResponseType</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">MyReturnObject</span><span class="p">),</span> <span class="s">&quot;MyControllerName&quot;</span><span class="p">,</span> <span class="s">&quot;Get&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">config</span><span class="p">.</span><span class="n">SetActualResponseType</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">MyReturnObject</span><span class="p">),</span> <span class="s">&quot;MyControllerName&quot;</span><span class="p">,</span> <span class="s">&quot;Post&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, we&rsquo;ll do a little cosmetic updating of some HTML files.</p>
+
+<ul>
+<li>Find the file <code>Areas-&gt;HelpPage-&gt;Views-&gt;Help-&gt;Index.cshtml</code></li>
+<li>Change the <code>&lt;title&gt;</code> of the page to match your application</li>
+<li>Remove the <code>&lt;header&gt;</code> section</li>
+<li>Provide a relevant introduction</li>
+</ul>
+
+
+<p>In later steps, we&rsquo;re going to update our help controller to allow us to enter comments that contain many lines. In order to allow that in the HTML, we need to update a few markup files.</p>
+
+<ul>
+<li>Find the file <code>Areas-&gt;HelpPage-&gt;Views-&gt;Help-&gt;DisplayTemplates-&gt;ApiGroup.cshtml</code></li>
+<li>Update the line reading:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span><span class="n">@api</span><span class="p">.</span><span class="n">Documentation</span><span class="p">&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>to:</p>
+
+<figure class='code'><figcaption><span>Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;&lt;</span><span class="n">pre</span><span class="p">&gt;</span><span class="n">@api</span><span class="p">.</span><span class="n">Documentation</span><span class="p">&lt;/</span><span class="n">pre</span><span class="p">&gt;&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, we&rsquo;re going to add a couple CSS styles that will help the page look a little cleaner.</p>
+
+<ul>
+<li>Find the file <code>Areas-&gt;HelpPage-&gt;HelpPage.css</code></li>
+<li>Add the following to the bottom of the file:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Areas\HelpPage\HelpPage.css </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.api-documentation</span> <span class="nt">pre</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">background-color</span><span class="o">:</span> <span class="k">transparent</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span> <span class="k">transparent</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.parameter-documentation</span> <span class="nt">pre</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">background-color</span><span class="o">:</span> <span class="k">transparent</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span> <span class="k">transparent</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, it&rsquo;s time to update the controller to allow us to use multiple lines in our method descriptions.</p>
+
+<ul>
+<li>Find the file <code>Areas-&gt;HelpPage-&gt;Controllers-&gt;HelpController.cs</code></li>
+<li>Replace the <code>Index</code> method with the following:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Areas\HelpPage\Controllers\HelpController.cs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Index</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">var</span> <span class="n">descriptions</span> <span class="p">=</span> <span class="n">Configuration</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">GetApiExplorer</span><span class="p">().</span><span class="n">ApiDescriptions</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">var</span> <span class="n">rex</span> <span class="p">=</span> <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">Text</span><span class="p">.</span><span class="n">RegularExpressions</span><span class="p">.</span><span class="n">Regex</span><span class="p">(</span><span class="s">@&quot;\n\s+&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">description</span> <span class="k">in</span> <span class="n">descriptions</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(!</span><span class="n">String</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">description</span><span class="p">.</span><span class="n">Documentation</span><span class="p">))</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">description</span><span class="p">.</span><span class="n">Documentation</span> <span class="p">=</span> <span class="n">rex</span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="n">description</span><span class="p">.</span><span class="n">Documentation</span><span class="p">,</span> <span class="s">&quot;\n&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="n">descriptions</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Replace the <code>Api</code> method with the following:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Areas\HelpPage\Controllers\HelpController.cs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Api</span><span class="p">(</span><span class="kt">string</span> <span class="n">apiId</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(!</span><span class="n">String</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">apiId</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">HelpPageApiModel</span> <span class="n">apiModel</span> <span class="p">=</span> <span class="n">Configuration</span><span class="p">.</span><span class="n">GetHelpPageApiModel</span><span class="p">(</span><span class="n">apiId</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">apiModel</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="kt">var</span> <span class="n">rex</span> <span class="p">=</span> <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">Text</span><span class="p">.</span><span class="n">RegularExpressions</span><span class="p">.</span><span class="n">Regex</span><span class="p">(</span><span class="s">@&quot;\n\s+&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">apiModel</span><span class="p">.</span><span class="n">ApiDescription</span><span class="p">.</span><span class="n">Documentation</span> <span class="p">=</span> <span class="n">rex</span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="n">apiModel</span><span class="p">.</span><span class="n">ApiDescription</span><span class="p">.</span><span class="n">Documentation</span><span class="p">,</span> <span class="s">&quot;\n&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">param</span> <span class="k">in</span> <span class="n">apiModel</span><span class="p">.</span><span class="n">ApiDescription</span><span class="p">.</span><span class="n">ParameterDescriptions</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="n">param</span><span class="p">.</span><span class="n">Documentation</span> <span class="p">=</span> <span class="n">rex</span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="n">param</span><span class="p">.</span><span class="n">Documentation</span><span class="p">,</span> <span class="s">&quot;\n&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="n">apiModel</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="s">&quot;Error&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now your help pages should allow you to use multiple lines in your method descriptions, as well as looking a little cleaner when viewed in a browser. You can test your new help pages by navigating to <code>http://localhost/MyApplication/help/</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Resizing the Screen Resolution in Ubuntu When You Can't See the Apply Button]]></title>
