@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Entity Framework 6: Specifying a ConnectionString in Code - Andrew Thomas' Blog</title>
+  <title>Andrew Thomas' Blog</title>
   <meta name="author" content="Andrew Thomas">
 
   
-  <meta name="description" content="I&rsquo;ve been working recently with Entity Framework 6. So far I find it pleasant enough, although not as intuitive (at least for me) as the likes &hellip;">
+  <meta name="description" content="I work for a large mid-west retailer, working on a large, public facing web site. My primary expertise is in web technologies, specifically ASP.NET &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.at-dot.net/blog/2013/12/29/entity-framework-6-specifying-a-connectionstring-in-code">
+  <link rel="canonical" href="http://blog.at-dot.net/about">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Andrew Thomas' Blog" type="application/atom+xml">
@@ -66,15 +66,15 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
-  <header>
-    
-      <h1 class="entry-title">Entity Framework 6: Specifying a ConnectionString in Code</h1>
-    
-    
+  <p>I work for a large mid-west retailer, working on a large, public facing web site. My primary expertise is in web technologies, specifically ASP.NET and MVC. However, I occasionally dable in Ruby on Rails and Node.js.</p>
+
+  
+    <footer>
       <p class="meta">
         
+        
 
 
 
@@ -86,88 +86,13 @@
   
 
 
-<time datetime="2013-12-29T07:37:31-05:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
+<time datetime="2014-05-06T13:42:00-04:00" pubdate data-updated="true">May 6<span>th</span>, 2014</time>
         
       </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>I&rsquo;ve been working recently with Entity Framework 6. So far I find it pleasant enough, although not as intuitive (at least for me) as the likes of NHibernate.</p>
-
-<p>One of the things I wanted to do was to determine the connection string in code, rather than specifying it in my web.config file. You can use the following code snippet to set your connection string.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="k">public</span> <span class="k">class</span> <span class="nc">MyContext</span> <span class="p">:</span> <span class="n">DbContext</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="k">public</span> <span class="nf">MyContext</span><span class="p">()</span> <span class="p">:</span> <span class="k">base</span><span class="p">()</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>      <span class="n">Database</span><span class="p">.</span><span class="n">Connection</span><span class="p">.</span><span class="n">ConnectionString</span> <span class="p">=</span> <span class="n">myAlternateConnectionString</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-
-
-  <footer>
-    <p class="meta">
       
+    </footer>
   
-
-<span class="byline author vcard">Posted by <span class="fn">Andrew Thomas</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-29T07:37:31-05:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
-      
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.at-dot.net/blog/2013/12/29/entity-framework-6-specifying-a-connectionstring-in-code/" data-via="athomas4219" data-counturl="http://blog.at-dot.net/blog/2013/12/29/entity-framework-6-specifying-a-connectionstring-in-code/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/" title="Previous Post: Adding Google Authentication with DotNetOpenAuth">&laquo; Adding Google Authentication with DotNetOpenAuth</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2014/01/15/outlook-has-left-the-building/" title="Next Post: Outlook Has Left The Building">Outlook Has Left The Building &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
 
 </div>
 
@@ -246,22 +171,6 @@
 
 </footer>
   
-
-<script type="text/javascript">
-      var disqus_shortname = 'andrewthomasblog';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://blog.at-dot.net/blog/2013/12/29/entity-framework-6-specifying-a-connectionstring-in-code/';
-        var disqus_url = 'http://blog.at-dot.net/blog/2013/12/29/entity-framework-6-specifying-a-connectionstring-in-code/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
 
 
 
