@@ -4,7 +4,7 @@
   <title><![CDATA[Andrew Thomas' Blog]]></title>
   <link href="http://blog.at-dot.net/atom.xml" rel="self"/>
   <link href="http://blog.at-dot.net/"/>
-  <updated>2014-05-06T14:24:05-04:00</updated>
+  <updated>2014-05-06T14:27:05-04:00</updated>
   <id>http://blog.at-dot.net/</id>
   <author>
     <name><![CDATA[Andrew Thomas]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Preparing Your WebAPI Site to Produce Better Documentation]]></title>
-    <link href="http://blog.at-dot.net/blog/2014/05/06/preparing-your-webapi-site-to-produce-better-documentation/"/>
-    <updated>2014-05-06T13:59:43-04:00</updated>
-    <id>http://blog.at-dot.net/blog/2014/05/06/preparing-your-webapi-site-to-produce-better-documentation</id>
+    <link href="http://blog.at-dot.net/blog/2014/05/08/preparing-your-webapi-site-to-produce-better-documentation/"/>
+    <updated>2014-05-08T13:59:43-04:00</updated>
+    <id>http://blog.at-dot.net/blog/2014/05/08/preparing-your-webapi-site-to-produce-better-documentation</id>
     <content type="html"><![CDATA[<h3>Introduction</h3>
 
 <p>A WebAPI site produced from the Visual Studio 2013 template comes with an MVC area designed to provide rich help pages. For the most part, this functionality comes for free with the template. However, using the following instructions can help produce a richer help experience for the user by allowing you to use multiple lines in your method descriptions. You are then free to include more information about the method, including expected return codes or additional descriptive text.</p>
