@@ -38,7 +38,13 @@
         <loc>
             http://blog.at-dot.net/blog/2014/05/08/preparing-your-webapi-site-to-produce-better-documentation/
         </loc>
-        <lastmod>2014-05-06T14:26:35-04:00</lastmod>
+        <lastmod>2014-05-06T14:41:25-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://blog.at-dot.net/blog/2014/05/13/mvc-what-is-html-dot-antiforgerytoken-and-how-does-it-actually-work/
+        </loc>
+        <lastmod>2014-05-13T11:03:20-04:00</lastmod>
     </url>
     <url>
         <loc>http://blog.at-dot.net/about/</loc>
@@ -46,11 +52,11 @@
     </url>
     <url>
         <loc>http://blog.at-dot.net/blog/archives/</loc>
-        <lastmod>2014-05-06T14:26:35-04:00</lastmod>
+        <lastmod>2014-05-13T11:03:20-04:00</lastmod>
     </url>
     <url>
         <loc>http://blog.at-dot.net/</loc>
-        <lastmod>2014-05-06T14:26:35-04:00</lastmod>
+        <lastmod>2014-05-13T11:03:20-04:00</lastmod>
     </url>
     <url>
         <loc>http://blog.at-dot.net/robots.txt</loc>
