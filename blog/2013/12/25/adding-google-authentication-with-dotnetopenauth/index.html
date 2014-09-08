@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Adding Google Authentication With DotNetOpenAuth - Andrew Thomas' Blog</title>
+  <meta name="author" content="Andrew Thomas">
+
+  
+  <meta name="description" content="Visual Studio 2013 ships with a very nice template to use DotNetOpenAuth for authentication with Google, Twitter, Facebook, and Microsoft. However, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Andrew Thomas' Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Andrew Thomas' Blog</a></h1>
+  
+    <h2>Like we need another blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.at-dot.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+	<li><a href="/about">About</a></li>
+	<li><a href="https://github.com/athomas4219/feedback/issues/new">Contact</a></li>  
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Adding Google Authentication With DotNetOpenAuth</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-25T09:50:49-05:00" pubdate data-updated="true">Dec 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Visual Studio 2013 ships with a very nice template to use <a href="http://dotnetopenauth.net/">DotNetOpenAuth</a> for authentication with Google, Twitter, Facebook, and Microsoft. However, it&rsquo;s a little complicated and comes with a lot of cruft. Rather than having too much in my ASP.NET MVC project, I prefer to start with an empty project and add features as I need them. If you are like me, you can use the following instructions to add Google authentication using DotNetOpenAuth.</p>
+
+<h4>Creating the Project</h4>
+
+<p>First, I created an empty MVC project. Once done, I used NuGet to add the <code>DotNetOpenAuth</code> package, which added quite a few other package dependencies. I also added the <code>Microsoft ASP.NET Web Optimization Framework</code> package.</p>
+
+<p>Next, open your <code>web.config</code> file and add a section for forms authentication:</p>
+
+<figure class='code'><figcaption><span>web.config </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;system.web&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;authentication</span> <span class="na">mode=</span><span class="s">&quot;Forms&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;forms</span> <span class="na">loginUrl=</span><span class="s">&quot;~/Account/Logon&quot;</span> <span class="na">timeout=</span><span class="s">&quot;15&quot;</span> <span class="na">slidingExpiration=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/authentication&gt;</span>
+</span><span class='line'><span class="nt">&lt;/system.web&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, we&rsquo;re going to add some controllers and views to our project. These controllers will display a welcome page, which will be unsecured, some methods used for logon, and a home page which will be secured.</p>
+
+<h4>Creating the Welcome Controller</h4>
+
+<p>Right click on your <code>Controllers</code> folder and add a new controller called <code>WelcomeController</code>. This controller will only have an <code>Index</code> method because it will only have a single page with the link to our logon method.</p>
+
+<p>Under the <code>Views</code> folder, right click on the <code>Welcome</code> folder and add a new view called <code>Index</code>. You can add whatever markup you want, but be sure to add a link to our logon controller action somewhere on the page:</p>
+
+<figure class='code'><figcaption><span>Views\Welcome\Index.cshtml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="n">@Html</span><span class="p">.</span><span class="n">ActionLink</span><span class="p">(</span><span class="s">&quot;Sign In&quot;</span><span class="p">,</span> <span class="s">&quot;Logon&quot;</span><span class="p">,</span> <span class="s">&quot;Account&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Updating the Default Route</h4>
+
+<p>Open the <code>RouteConfig.cs</code> file under the <code>App_Start</code> folder. Change the default controller from <code>Home</code> to <code>Welcome</code>. When you&rsquo;re done, your route should look like:</p>
+
+<figure class='code'><figcaption><span>App_Start\RouteConfig.cs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="n">routes</span><span class="p">.</span><span class="n">MapRoute</span><span class="p">(</span>
+</span><span class='line'>    <span class="n">name</span><span class="p">:</span> <span class="s">&quot;Default&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">:</span> <span class="s">&quot;{controller}/{action}/{id}&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">defaults</span><span class="p">:</span> <span class="k">new</span> <span class="p">{</span> <span class="n">controller</span> <span class="p">=</span> <span class="s">&quot;Welcome&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="p">=</span> <span class="s">&quot;Index&quot;</span><span class="p">,</span> <span class="n">id</span> <span class="p">=</span> <span class="n">UrlParameter</span><span class="p">.</span><span class="n">Optional</span> <span class="p">}</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Creating the Account Controller</h4>
+
+<p>Right click on your <code>Controllers</code> folder and add a new controller called <code>AccountController</code>. This controller will have three methods, one to perform a redirect to the Google authentication server, a method to process the return call, and a <code>LogOff</code> method to clear the authentication cookie.</p>
+
+<p>Add the following methods to your Account controller:</p>
+
+<figure class='code'><figcaption><span>Controllers\AccountController.cs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Logon</span><span class="p">(</span><span class="kt">string</span> <span class="n">returnUrl</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">var</span> <span class="n">rp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">OpenIdRelyingParty</span><span class="p">();</span>
+</span><span class='line'>    <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="n">rp</span><span class="p">.</span><span class="n">CreateRequest</span><span class="p">(</span><span class="s">&quot;https://www.google.com/accounts/o8/id&quot;</span><span class="p">,</span> <span class="n">Realm</span><span class="p">.</span><span class="n">AutoDetect</span><span class="p">,</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="n">Request</span><span class="p">.</span><span class="n">Url</span><span class="p">,</span> <span class="n">Url</span><span class="p">.</span><span class="n">Action</span><span class="p">(</span><span class="s">&quot;Authenticate&quot;</span><span class="p">)));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">request</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(!</span><span class="n">String</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">returnUrl</span><span class="p">))</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">request</span><span class="p">.</span><span class="n">AddCallbackArguments</span><span class="p">(</span><span class="s">&quot;returnUrl&quot;</span><span class="p">,</span> <span class="n">returnUrl</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kt">var</span> <span class="n">fetch</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FetchRequest</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">fetch</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">AddRequired</span><span class="p">(</span><span class="s">&quot;http://axschema.org/contact/email&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">fetch</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">AddRequired</span><span class="p">(</span><span class="s">&quot;http://axschema.org/namePerson/first&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">fetch</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">AddRequired</span><span class="p">(</span><span class="s">&quot;http://axschema.org/namePerson/last&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">fetch</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">AddRequired</span><span class="p">(</span><span class="s">&quot;http://schemas.openid.net/ax/api/user_id&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">request</span><span class="p">.</span><span class="n">AddExtension</span><span class="p">(</span><span class="n">fetch</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">request</span><span class="p">.</span><span class="n">RedirectingResponse</span><span class="p">.</span><span class="n">AsActionResultMvc5</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can see that we are requesting additional information from the Google authentication server: email address, first name, last name, and the user&rsquo;s unique ID.</p>
+
+<p>Also add the <code>Authenticate</code> method:</p>
+
+<figure class='code'><figcaption><span>Controllers\AccountController.cs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Authenticate</span><span class="p">(</span><span class="kt">string</span> <span class="n">returnUrl</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">var</span> <span class="n">rp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">OpenIdRelyingParty</span><span class="p">();</span>
+</span><span class='line'>    <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="n">rp</span><span class="p">.</span><span class="n">GetResponse</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">response</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">switch</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Status</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="k">case</span> <span class="n">AuthenticationStatus</span><span class="p">.</span><span class="n">Authenticated</span><span class="p">:</span>
+</span><span class='line'>                <span class="kt">string</span> <span class="n">identifier</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">ClaimedIdentifier</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="kt">var</span> <span class="n">fetch</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">GetExtension</span><span class="p">&lt;</span><span class="n">FetchResponse</span><span class="p">&gt;();</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="kt">string</span> <span class="n">email</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+</span><span class='line'>                <span class="kt">string</span> <span class="n">first</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+</span><span class='line'>                <span class="kt">string</span> <span class="n">last</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+</span><span class='line'>                <span class="kt">string</span> <span class="n">userId</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">fetch</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="n">email</span> <span class="p">=</span> <span class="n">fetch</span><span class="p">.</span><span class="n">GetAttributeValue</span><span class="p">(</span><span class="s">&quot;http://axschema.org/contact/email&quot;</span><span class="p">);</span>
+</span><span class='line'>                    <span class="n">first</span> <span class="p">=</span> <span class="n">fetch</span><span class="p">.</span><span class="n">GetAttributeValue</span><span class="p">(</span><span class="s">&quot;http://axschema.org/namePerson/first&quot;</span><span class="p">);</span>
+</span><span class='line'>                    <span class="n">last</span> <span class="p">=</span> <span class="n">fetch</span><span class="p">.</span><span class="n">GetAttributeValue</span><span class="p">(</span><span class="s">&quot;http://axschema.org/namePerson/last&quot;</span><span class="p">);</span>
+</span><span class='line'>                    <span class="n">userId</span> <span class="p">=</span> <span class="n">fetch</span><span class="p">.</span><span class="n">GetAttributeValue</span><span class="p">(</span><span class="s">&quot;http://schemas.openid.net/ax/api/user_id&quot;</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="c1">// Add your own code to perform any checks in your system to find or create the user returned from Google</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">FormsAuthenticationTicket</span> <span class="n">authTicket</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FormsAuthenticationTicket</span><span class="p">(</span><span class="m">1</span><span class="p">,</span>
+</span><span class='line'>                    <span class="n">FormsAuthentication</span><span class="p">.</span><span class="n">FormsCookieName</span><span class="p">,</span>
+</span><span class='line'>                    <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">,</span>
+</span><span class='line'>                    <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">AddDays</span><span class="p">(</span><span class="m">90</span><span class="p">),</span>
+</span><span class='line'>                    <span class="k">true</span><span class="p">,</span>
+</span><span class='line'>                    <span class="s">&quot;User data. Perhaps your user&#39;s unique ID?&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="kt">string</span> <span class="n">encryptedTicket</span> <span class="p">=</span> <span class="n">FormsAuthentication</span><span class="p">.</span><span class="n">Encrypt</span><span class="p">(</span><span class="n">authTicket</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">HttpCookie</span> <span class="n">authCookie</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpCookie</span><span class="p">(</span><span class="n">FormsAuthentication</span><span class="p">.</span><span class="n">FormsCookieName</span><span class="p">,</span> <span class="n">encryptedTicket</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">authTicket</span><span class="p">.</span><span class="n">IsPersistent</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                      <span class="n">authCookie</span><span class="p">.</span><span class="n">Expires</span> <span class="p">=</span> <span class="n">authTicket</span><span class="p">.</span><span class="n">Expiration</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">System</span><span class="p">.</span><span class="n">Web</span><span class="p">.</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Response</span><span class="p">.</span><span class="n">Cookies</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">authCookie</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">Url</span><span class="p">.</span><span class="n">IsLocalUrl</span><span class="p">(</span><span class="n">returnUrl</span><span class="p">))</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="nf">Redirect</span><span class="p">(</span><span class="n">returnUrl</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>                <span class="k">else</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="nf">RedirectToAction</span><span class="p">(</span><span class="s">&quot;Index&quot;</span><span class="p">,</span> <span class="s">&quot;Home&quot;</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">default</span><span class="p">:</span>
+</span><span class='line'>                <span class="k">this</span><span class="p">.</span><span class="n">ModelState</span><span class="p">.</span><span class="n">AddModelError</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="n">Empty</span><span class="p">,</span> <span class="s">&quot;An error occurred during login.&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="s">&quot;Logon&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Take note of a couple of things in the <code>Authenticate</code> method:
+* You need to add your own code in this method to check your user store for an existing user, or create it if it doesn&rsquo;t already exist.
+* We are creating our authentication ticket manually to give us more control over the cookie. You can store a little bit of information in the user data of the ticket. I store the ID of the user that&rsquo;s logged in, then use that information in a controller base class to lookup the user on each page.</p>
+
+<p>Finally, add our brief <code>LogOff</code> method:</p>
+
+<figure class='code'><figcaption><span>Controllers\AccountController.cs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">LogOff</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">FormsAuthentication</span><span class="p">.</span><span class="n">SignOut</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nf">RedirectToAction</span><span class="p">(</span><span class="s">&quot;Index&quot;</span><span class="p">,</span> <span class="s">&quot;Welcome&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Creating the Home Controller</h4>
+
+<p>Right click on your <code>Controllers</code> folder and add a new controller called <code>HomeController</code>. This controller will have at least one method to display the index page, but may have more, depending on your application.</p>
+
+<p>Under the <code>Views</code> folder, right click on the <code>Home</code> folder and add a new view called <code>Index</code>. This page cannot be viewed without logging in, so is the first page you&rsquo;ll create in your application that will have secured content.</p>
+
+<p>Open your new <code>HomeController.cs</code> file and add the <code>[Authorize]</code> attribute, so that your <code>HomeController</code> looks like the following. The <code>[Authorize]</code> attribute is what will ensure that this page cannot be viewed by unauthenticated users.</p>
+
+<figure class='code'><figcaption><span>Controllers\HomeController.cs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="na">[Authorize]</span>
+</span><span class='line'><span class="k">public</span> <span class="k">class</span> <span class="nc">HomeController</span> <span class="p">:</span> <span class="n">BaseController</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">//</span>
+</span><span class='line'>    <span class="c1">// GET: /Home/</span>
+</span><span class='line'>    <span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Index</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;ve done everything correctly, once you run the project you&rsquo;ll be presented with your welcome screen. When you click on the <code>Sign In</code> link, you be redirected to the Google logon page, then back to your application&rsquo;s home page.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Thomas</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-25T09:50:49-05:00" pubdate data-updated="true">Dec 25<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/" data-via="athomas4219" data-counturl="http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/18/installing-the-electric-plum-iphone-simulator-in-visual-studio-2013/" title="Previous Post: Installing the Electric Plum iPhone Simulator in Visual Studio 2013">&laquo; Installing the Electric Plum iPhone Simulator in Visual Studio 2013</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/12/29/entity-framework-6-specifying-a-connectionstring-in-code/" title="Next Post: Entity Framework 6: Specifying a ConnectionString in Code">Entity Framework 6: Specifying a ConnectionString in Code &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/13/mvc-what-is-html-dot-antiforgerytoken-and-how-does-it-actually-work/">MVC: What Is Html.AntiForgeryToken and How Does It Actually Work?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/08/preparing-your-webapi-site-to-produce-better-documentation/">Preparing Your WebAPI Site to Produce Better Documentation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/16/resizing-the-screen-resolution-in-ubuntu-when-you-cant-see-the-apply-button/">Resizing the Screen Resolution in Ubuntu When You Can't See the Apply Button</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/15/outlook-has-left-the-building/">Outlook Has Left the Building</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/29/entity-framework-6-specifying-a-connectionstring-in-code/">Entity Framework 6: Specifying a ConnectionString in Code</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/athomas4219">@athomas4219</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'athomas4219',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Andrew Thomas -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'andrewthomasblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/';
+        var disqus_url = 'http://blog.at-dot.net/blog/2013/12/25/adding-google-authentication-with-dotnetopenauth/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
