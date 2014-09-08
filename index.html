@@ -1,0 +1,28 @@
+---
+layout: default
+---
+
+{% for post in site.posts %}
+  <div class="postExcerpt">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+          <p>
+            <bd>{{ post.date | date: "%b %-d, %Y" }}</bd>
+          </p>
+          <h4>{{ post.title }}</h4>
+
+          {{ post.excerpt }}
+        
+          <p>
+            <a href="{{ post.url }}">
+              Continue Reading...
+            </a>
+            <a href="{{ site.url }}{{ post.url }}#disqus_thread" data-disqus-identifier="{{ site.url }}{{ post.url }}">
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
