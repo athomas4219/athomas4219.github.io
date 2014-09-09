@@ -1,10 +1,10 @@
 # Site settings
 author: Andrew Thomas
-title: Yet Another Blog
+title: Another Tech Blog
 email: blog@at-dot.net
 description: Like we need another blog
 baseurl: ""
-url: "http://localhost:4000"
+url: "http://blog.at-dot.net/"
 gravatar_url: http://www.gravatar.com/avatar/ed0b6712d7b2d6725ea107f2ddecc138.png
 subscribe_rss: http://blog.at-dot.net/atom.xml
 
