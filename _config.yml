@@ -25,9 +25,9 @@ google_analytics_tracking_id: UA-46642002-1
 
 # Build settings
 #markdown: kramdown
-markdown: redcarpet
-redcarpet:
-  extensions: ["tables"]
+# markdown: redcarpet
+# redcarpet:
+#   extensions: ["tables"]
 permalink: /archive/:year/:month/:day/:title/
 paginate: 10
 paginate_path: "page/:num"
