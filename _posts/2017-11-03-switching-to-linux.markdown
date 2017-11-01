@@ -18,12 +18,28 @@ I've always been more comfortable with Ubuntu flavors of Linux, but I wanted to 
 * [Fedora](https://getfedora.org/)
 * [openSUSE](https://www.opensuse.org/)
 * [PopOS!](https://system76.com/pop)
+* [Linux Mint](https://linuxmint.com/)
 
 # How
 
-I'm sort of just playing it by ear on choosing a distribution, but I do have a few things I'll be comparing:
+I'm playing it by ear on choosing a distribution and I only have a couple of  things I'll be comparing:
 
-* Breadth of packages - I'd prefer to just run a command with the package manager and get my software.
-* Ease of management - I love the scriptability of Linux, but it's sometimes nice to have a GUI to manage things too.
-* Support for my hardware - I'll be installing on a desktop and a MacBook Pro 13", which can sometimes be picky with Linux distributions.
+* Support for my hardware - I'll be installing on an Acer Predator desktop and a MacBook Pro 13", which can sometimes be picky with Linux distributions.
 * Works "out of the box" - while I'm not opposed to terminal work, I really don't want to have to figure things out, I'd prefer that they just work (file sharing, for example)
+
+# Ubuntu
+
+As I mentioned before, I am biased towards Ubuntu.
+
+Pros:
+
+* All the packages
+*
+
+# Fedora
+
+# openSUSE
+
+# PopOS!
+
+# Linux Mint
