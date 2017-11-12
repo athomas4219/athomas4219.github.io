@@ -30,6 +30,6 @@ paginate: 10
 paginate_path: "page/:num"
 category_dir: categories
 
-gems:
+plugins:
   - jekyll-sitemap
   - jekyll-paginate
